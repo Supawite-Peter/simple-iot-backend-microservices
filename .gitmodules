@@ -1,0 +1,12 @@
+[submodule "simple-iot-api-gateway"]
+	path = simple-iot-api-gateway
+	url = https://github.com/Supawite-Peter/simple-iot-api-gateway.git
+[submodule "simple-iot-user-service"]
+	path = simple-iot-user-service
+	url = https://github.com/Supawite-Peter/simple-iot-user-service.git
+[submodule "simple-iot-auth-service"]
+	path = simple-iot-auth-service
+	url = https://github.com/Supawite-Peter/simple-iot-auth-service.git
+[submodule "simple-iot-sensor-data-service"]
+	path = simple-iot-sensor-data-service
+	url = https://github.com/Supawite-Peter/simple-iot-sensor-data-service.git

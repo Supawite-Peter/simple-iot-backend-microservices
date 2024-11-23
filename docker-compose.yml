@@ -1,0 +1,82 @@
+services:
+  api-gateway:
+    image: simple-iot-api-gateway:${VERSION_API_GATEWAY}
+    build: ./simple-iot-api-gateway
+    environment:
+      RMQ_URL: ${RMQ_URL}
+      RMQ_AUTH_QUEUE: ${RMQ_AUTH_QUEUE}
+      RMQ_USER_QUEUE: ${RMQ_USER_QUEUE}
+      RMQ_SENSOR_DATA_QUEUE: ${RMQ_SENSOR_DATA_QUEUE}
+      API_GATEWAY_PORT: ${API_GATEWAY_PORT}
+    ports:
+      - ${API_GATEWAY_PORT}:${API_GATEWAY_PORT}
+
+  auth-service:
+    image: simple-iot-auth-service:${VERSION_AUTH_SERVICE}
+    build: ./simple-iot-auth-service
+    environment:
+      RMQ_URL: ${RMQ_URL}
+      RMQ_AUTH_QUEUE: ${RMQ_AUTH_QUEUE}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRATION: ${JWT_EXPIRATION}
+  
+  user-service:
+    image: simple-iot-user-service:${VERSION_USER_SERVICE}
+    build: ./simple-iot-user-service
+    environment:
+      RMQ_URL: ${RMQ_URL}
+      RMQ_AUTH_QUEUE: ${RMQ_AUTH_QUEUE}
+      RMQ_USER_QUEUE: ${RMQ_USER_QUEUE}
+      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_PORT: ${MYSQL_PORT}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    depends_on:
+      - mysql
+
+  sensor-data-service:
+    image: simple-iot-sensor-data-service:${VERSION_SENSOR_DATA_SERVICE}
+    build: ./simple-iot-sensor-data-service
+    environment:
+      RMQ_URL: ${RMQ_URL}
+      RMQ_SENSOR_DATA_QUEUE: ${RMQ_SENSOR_DATA_QUEUE}
+      RMQ_USER_QUEUE: ${RMQ_USER_QUEUE}
+      MONGODB_URI: ${MONGODB_URI}
+    depends_on:
+      - mongodb
+
+  rabbitmq:
+    image: rabbitmq:3.11-management-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RMQ_DEFAULT_PASS}
+    ports:
+      - ${RMQ_PORT}:${RMQ_PORT}
+      - ${RMQ_MANAGEMENT_PORT}:${RMQ_MANAGEMENT_PORT}
+
+  mysql:
+    image: mysql:8.0.40
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - ${MYSQL_PORT}:${MYSQL_PORT}
+    volumes:
+      - mysql-data:/var/lib/mysql
+    
+  mongodb:
+    image: mongo:8.0
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    ports:
+      - ${MONGODB_PORT}:${MONGODB_PORT}
+    volumes:
+      - mongodb-data:/data/db
+
+volumes:
+  mysql-data:
+  mongodb-data:

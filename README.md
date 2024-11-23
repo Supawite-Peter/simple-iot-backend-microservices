@@ -36,11 +36,15 @@ Furthermore, users can query the latest data or data from a preferred time perio
 - :black_square_button: Simple Web Front-end
 - ...
 
-## Docker Compose
+## Run the project
 
-```
-docker-compose up -d
-```
+1. Create and populate `.env` file. (example on `.env.example`)
+
+2. Run docker compose
+
+    ```
+    docker-compose up -d
+    ```
 
 ## API
 

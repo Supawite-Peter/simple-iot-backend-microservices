@@ -24,7 +24,7 @@ Furthermore, users can query the latest data or data from a preferred time perio
 - :white_check_mark: Support Timestamp Devices Data
 - :white_check_mark: API Docs
 - :white_check_mark: Migrate User/Device/Topic to SQL DB
-- :black_square_button: Dockerize / Compose
+- :white_check_mark: Dockerize / Compose
 - :black_square_button: JWT Refresh/Access Token
 - :black_square_button: JWT Cookie
 - :black_square_button: API Key for Devices Data
@@ -35,6 +35,12 @@ Furthermore, users can query the latest data or data from a preferred time perio
 - :black_square_button: Aggregate Sensor Data
 - :black_square_button: Simple Web Front-end
 - ...
+
+## Docker Compose
+
+```
+docker-compose up -d
+```
 
 ## API
 

@@ -25,6 +25,7 @@ Furthermore, users can query the latest data or data from a preferred time perio
 - :white_check_mark: API Docs
 - :white_check_mark: Migrate User/Device/Topic to SQL DB
 - :white_check_mark: Dockerize / Compose
+- :white_check_mark: Caching
 - :black_square_button: JWT Refresh/Access Token
 - :black_square_button: JWT Cookie
 - :black_square_button: API Key for Devices Data

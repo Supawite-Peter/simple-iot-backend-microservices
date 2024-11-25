@@ -8,6 +8,10 @@ services:
       RMQ_USER_QUEUE: ${RMQ_USER_QUEUE}
       RMQ_SENSOR_DATA_QUEUE: ${RMQ_SENSOR_DATA_QUEUE}
       API_GATEWAY_PORT: ${API_GATEWAY_PORT}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      REDIS_CACHE_TTL: ${REDIS_CACHE_TTL}
     ports:
       - ${API_GATEWAY_PORT}:${API_GATEWAY_PORT}
 
@@ -76,6 +80,12 @@ services:
       - ${MONGODB_PORT}:${MONGODB_PORT}
     volumes:
       - mongodb-data:/data/db
+
+  redis-cache:
+    image: redis:7.4.1-alpine
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}
 
 volumes:
   mysql-data:

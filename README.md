@@ -446,7 +446,7 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 > | http code | content-type | response |
 > |-----------|--------------|----------|
-> | `201` | `application/json` | `[{"timestamp": {{iso_timestamp}},"metadata":{"topic":{{topic}},"device_id":{{device_id}}},"value":{{number}}}, ...]` |
+> | `201` | `application/json` | `[{ "timestamp": {{iso_timestamp}},"value":{{number}} }, ...]` |
 > | `400`         | `application/json`                | `{"message": "Validation failed","statusCode": 400}`|
 > | `401`         | `application/json`         | `{"message": "Unauthorized","statusCode": 401}`|
 > | `401`         | `application/json`         | `{"message": "Requester is not the owner of the device","statusCode": 401}`|
@@ -478,18 +478,10 @@ Furthermore, users can query the latest data or data from a preferred time perio
 >[
 >    {
 >        "timestamp": "2024-10-18T10:57:26.776Z",
->        "metadata": {
->            "topic": "temp",
->            "device_id": 5
->        },
 >        "value": 0
 >    },
 >    {
 >        "timestamp": "2024-10-18T10:54:05.904Z",
->        "metadata": {
->            "topic": "temp",
->            "device_id": 5
->        },
 >        "value": 3
 >    }
 >]
@@ -517,6 +509,12 @@ Furthermore, users can query the latest data or data from a preferred time perio
 > | `deviceId` | required | number | target device id to storing data |
 > | `topic` | required | string | target topic to storing data |
 
+##### Query Parameters
+
+> | name | type | data type | description |
+> |------|------|-----------|-------------|
+> | `unix` | optional | boolean | true if want timestamp body to be in unix timestamp otherwise in iso timestamp (default) |
+
 ##### Body
 
 > None
@@ -526,7 +524,7 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 > | http code | content-type | response |
 > |-----------|--------------|----------|
-> | `200` | `application/json` | `{{"timestamp": {{iso_timestamp}},"metadata":{"topic":{{topic}},"device_id":{{device_id}}},"value":{{number}}}}` |
+> | `200` | `application/json` | `{ "timestamp": {{iso/unix_timestamp}},"value":{{number}} }` |
 > | `401`         | `application/json`         | `{"message": "Unauthorized","statusCode": 401}`|
 > | `401`         | `application/json`         | `{"message": "Requester is not the owner of the device","statusCode": 401}`|
 > | `404`         | `application/json`         | `{"message": "Device with id {{device_id}} was not found","statusCode": 404}`|
@@ -544,10 +542,6 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 >```javascript
 >{
->    "metadata": {
->        "device_id": 5,
->        "topic": "temp"
->    },
 >    "timestamp": "2024-10-18T10:57:26.776Z",
 >    "value": 0
 >}
@@ -571,6 +565,12 @@ Furthermore, users can query the latest data or data from a preferred time perio
 > | `deviceId` | required | number | target device id to storing data |
 > | `topic` | required | string | target topic to storing data |
 
+##### Query Parameters
+
+> | name | type | data type | description |
+> |------|------|-----------|-------------|
+> | `unix` | optional | boolean | true if want timestamp body to be in unix timestamp otherwise in iso timestamp (default) |
+
 ##### Body
 
 > | name | type | data type | description |
@@ -583,7 +583,7 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 > | http code | content-type | response |
 > |-----------|--------------|----------|
-> | `200` | `application/json` | `[{{"timestamp": {{iso_timestamp}},"metadata":{"topic":{{topic}},"device_id":{{device_id}}},"value":{{number}}}, ...]}` |
+> | `200` | `application/json` | `[{ "timestamp": {{iso/unix_timestamp}},"value":{{number}}, ...]}` |
 > | `401`         | `application/json`         | `{"message": "Unauthorized","statusCode": 401}`|
 > | `401`         | `application/json`         | `{"message": "Requester is not the owner of the device","statusCode": 401}`|
 > | `404`         | `application/json`         | `{"message": "Device with id {{device_id}} was not found","statusCode": 404}`|
@@ -607,18 +607,10 @@ Furthermore, users can query the latest data or data from a preferred time perio
 >```javascript
 >[
 >    {
->        "metadata": {
->            "device_id": 5,
->            "topic": "temp"
->        },
 >        "timestamp": "2024-10-18T11:05:25.896Z",
 >        "value": 1
 >    },
 >    {
->        "metadata": {
->            "device_id": 5,
->            "topic": "temp"
->        },
 >        "timestamp": "2024-10-18T11:05:25.062Z",
 >        "value": 1
 >    }

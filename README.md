@@ -68,8 +68,8 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 > | name | type | data type | description |
 > |------|------|-----------|-------------|
-> | username   | required | string | string of username  |
-> | password   | required | string | string of password  |
+> | username | required | string | string of username  |
+> | password | required | string | string of password  |
 
 
 ##### Responses
@@ -100,7 +100,7 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 > | header | type | description |      
 > |--------|------|-------------|
-> | Authorization   | Bearer {{JWT_TOKEN}} | Get from /auth/login |
+> | `Authorization` | Bearer {{JWT_TOKEN}} | Get from /auth/login |
 
 
 ##### Parameters
@@ -109,19 +109,19 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 ##### Body
 
-> | name      |  type     | data type               | description                                                           |
-> |-----------|-----------|-------------------------|-----------------------------------------------------------------------|
-> | password   | required | string | string of password
+> | name | type | data type | description |
+> |------|------|-----------|-------------|
+> | `password` | required | string | string of password |
 
 
 ##### Responses
 
-> | http code     | content-type                      | response                                                            |
-> |---------------|-----------------------------------|---------------------------------------------------------------------|
-> | `200`         | `application/json`        | `{"id": 1, "username": "hello"}`|
-> | `400`         | `application/json`                | `{"message": "Validation failed","statusCode": 400}`|
-> | `401`         | `application/json`         | `{"message": "Unauthorized","statusCode": 401}`|
-> | `404`         | `application/json`         | `{"message": "User does not exist","statusCode": 404}`|
+> | http code | content-type | response |
+> |-----------|--------------|----------|
+> | `200` | `application/json` | `{"id": 1, "username": "hello"}` |
+> | `400` | `application/json` | `{"message": "Validation failed","statusCode": 400}` |
+> | `401` | `application/json` | `{"message": "Unauthorized","statusCode": 401}` |
+> | `404` | `application/json` | `{"message": "User does not exist","statusCode": 404}` |
 
 ##### Example cURL
 
@@ -132,6 +132,48 @@ Furthermore, users can query the latest data or data from a preferred time perio
 > --data '{
 >    "password": "world"
 > }'
+> ```
+
+</details>
+
+#### Get User Detail
+
+<details>
+ <summary><code>GET</code> <code><b>/users/{userId}</b></code> <code>(Get user account detail)</code></summary>
+
+##### Authentication
+
+> | header | type | description |      
+> |--------|------|-------------|
+> | `Authorization` | Bearer {{JWT_TOKEN}} | Get from /auth/login |
+
+
+##### Parameters
+
+> | name | type | data type | description |
+> |------|------|-----------|-------------|
+> | `userId` | required | number | targeted user id for details |
+
+##### Body
+
+> None
+
+
+##### Responses
+
+> | http code | content-type | response |
+> |-----------|--------------|----------|
+> | `200` | `application/json` | `{"id": 1, "username": "hello"}` |
+> | `400` | `application/json` | `{"message": "Validation failed","statusCode": 400}` |
+> | `401` | `application/json` | `{"message": "Unauthorized","statusCode": 401}` |
+> | `404` | `application/json` | `{"message": "User does not exist","statusCode": 404}` |
+
+##### Example cURL
+
+> ```javascript
+> curl --location --request DELETE 'http://localhost:3000/users/1' \
+> --header 'Authorization: Bearer {{JWT_TOKEN}}' \
+> --header 'Content-Type: application/json'
 > ```
 
 </details>
@@ -155,20 +197,20 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 ##### Body
 
-> | name      |  type     | data type               | description                                                           |
-> |-----------|-----------|-------------------------|-----------------------------------------------------------------------|
-> | username   | required | string | string of username  |
-> | password   | required | string | string of password
+> | name | type | data type | description |
+> |------|------|-----------|-------------|
+> | `username` | required | string | string of username |
+> | `password` | required | string | string of password |
 
 
 ##### Responses
 
 > | http code | content-type | response |
 > |-----------|--------------|----------|
-> | `200`     | `application/json` | `{"accessToken": {{JWT_TOKEN}}}`|
-> | `400`     | `application/json` | `{"message": "Validation failed","statusCode": 400}`|
-> | `401`     | `application/json` | `{"message": "Incorrect password","statusCode": 401}`|
-> | `404`     | `application/json` | `{"message": "User doesn't exist","statusCode": 404}`|
+> | `200` | `application/json` | `{"accessToken": {{JWT_TOKEN}}}` |
+> | `400` | `application/json` | `{"message": "Validation failed","statusCode": 400}` |
+> | `401` | `application/json` | `{"message": "Incorrect password","statusCode": 401}` |
+> | `404` | `application/json` | `{"message": "User doesn't exist","statusCode": 404}` |
 
 ##### Example cURL
 
@@ -196,7 +238,7 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 > | header | type | description |      
 > |--------|------|-------------|
-> | Authorization   | Bearer {{JWT_TOKEN}} | Get from /auth/login |
+> | `Authorization` | Bearer {{JWT_TOKEN}} | Get from /auth/login |
 
 ##### Parameters
 
@@ -206,8 +248,8 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 > | name | type | data type | description |
 > |------|------|-----------|-------------|
-> | name   | required | string   | Name of the device  |
-> | topics | optional | string[] or string | Topics to be registered   |
+> | `name` | required | string   | Name of the device |
+> | `topics` | optional | string[] or string | Topics to be registered |
 
 
 ##### Responses
@@ -238,9 +280,9 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 ##### Authentication
 
-> | header      |  type    | description   |      
-> |-----------|-----------|-------------------------|
-> | Authorization   | Bearer {{JWT_TOKEN}} | Get from /auth/login
+> | header | type | description |      
+> |--------|------|-------------|
+> | `Authorization` | Bearer {{JWT_TOKEN}} | Get from /auth/login
 
 
 ##### Parameters
@@ -249,20 +291,20 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 ##### Body
 
-> | name      |  type     | data type               | description                                                           |
-> |-----------|-----------|-------------------------|-----------------------------------------------------------------------|
-> | id  | required | string or number | device id to be delete |
+> | name  |  type | data type | description |
+> |-------|-------|-----------|-------------|
+> | `id` | required | string or number | device id to be delete |
 
 
 ##### Responses
 
-> | http code     | content-type                      | response                                                            |
-> |---------------|-----------------------------------|---------------------------------------------------------------------|
-> | `200`         | `application/json`        | `{"id": 1, "name": "device2", "userId": 1, "topics": ["temp", "rh"]}`|
-> | `400`         | `application/json`         | `{"message": "Validation failed","statusCode": 400}`|
-> | `401`         | `application/json`         | `{"message": "Unauthorized","statusCode": 401}`|
-> | `404`         | `application/json`         | `{"message": "Device with id {{deviceId}} was not found for user with id {{userId}}","statusCode": 404}`|
-> | `404`         | `application/json`         | `{"message": "User not found","statusCode": 404}`|
+> | http code | content-type | response |
+> |-----------|--------------|----------|
+> | `200` | `application/json` | `{"id": 1, "name": "device2", "userId": 1, "topics": ["temp", "rh"]}` |
+> | `400` | `application/json` | `{"message": "Validation failed","statusCode": 400}` |
+> | `401` | `application/json` | `{"message": "Unauthorized","statusCode": 401}` |
+> | `404` | `application/json` | `{"message": "Device with id {{deviceId}} was not found for user with id {{userId}}","statusCode": 404}` |
+> | `404` | `application/json` | `{"message": "User not found","statusCode": 404}` |
 
 ##### Example cURL
 
@@ -273,6 +315,87 @@ Furthermore, users can query the latest data or data from a preferred time perio
 > --data '{
 >    "id": "1"
 > }'
+> ```
+
+</details>
+
+#### Get Device Detail
+
+<details>
+ <summary><code>GET</code> <code><b>/devices/{deviceId}</b></code> <code>(Get device details)</code></summary>
+
+##### Authentication
+
+> | header | type | description |      
+> |--------|------|-------------|
+> | `Authorization` | Bearer {{JWT_TOKEN}} | Get from /auth/login |
+
+
+##### Parameters
+
+> | name | type | data type | description |
+> |------|------|-----------|-------------|
+> | `deviceId` | required | number | targeted device id for details |
+
+##### Body
+
+> None
+
+
+##### Responses
+
+> | http code | content-type | response |
+> |-----------|--------------|----------|
+> | `200` | `application/json` | `{"id": 1, "name": "device2", "userId": 1, "topics": ["temp", "rh"]}` |
+> | `400` | `application/json` | `{"message": "Validation failed","statusCode": 400}` |
+> | `401` | `application/json` | `{"message": "Unauthorized","statusCode": 401}` |
+> | `404` | `application/json` | `{"message": "Device with id {{deviceId}} was not found for user with id {{userId}}","statusCode": 404}` |
+> | `404` | `application/json` | `{"message": "User not found","statusCode": 404}` |
+
+##### Example cURL
+
+> ```javascript
+> curl --location --request DELETE 'http://localhost:3000/devices/1' \
+> --header 'Authorization: Bearer {{JWT_TOKEN}}' \
+> --header 'Content-Type: application/json'
+> ```
+
+</details>
+
+#### List User Owned Devices
+
+<details>
+ <summary><code>GET</code> <code><b>/devices</b></code> <code>(List every devices registered by current user)</code></summary>
+
+##### Authentication
+
+> | header | type | description |      
+> |--------|------|-------------|
+> | `Authorization` | Bearer {{JWT_TOKEN}} | Get from /auth/login |
+
+
+##### Parameters
+
+> None
+
+##### Body
+
+> None
+
+
+##### Responses
+
+> | http code | content-type | response |
+> |-----------|--------------|----------|
+> | `200` | `application/json` | `[{"id": 1, "name": "device1", "userId": 1,  "topics": ["temp", "rh"]}]` |
+> | `401` | `application/json` | `{"message": "Unauthorized","statusCode": 401}` |
+> | `404` | `application/json` | `{"message": "No devices found","statusCode": 404}` |
+
+##### Example cURL
+
+> ```javascript
+> curl --location 'http://localhost:3000/devices' \
+> --header 'Authorization: Bearer {{JWT_TOKEN}}'
 > ```
 
 </details>
@@ -288,7 +411,7 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 > | header | type | description |      
 > |--------|------|-------------|
-> | Authorization   | Bearer {{JWT_TOKEN}} | Get from /auth/login |
+> | `Authorization` | Bearer {{JWT_TOKEN}} | Get from /auth/login |
 
 ##### Parameters
 
@@ -300,7 +423,7 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 > | name | type | data type | description |
 > |------|------|-----------|-------------|
-> | topics   | required | string[] or string   | topics to be added |
+> | `topics` | required | string[] or string | topics to be added |
 
 
 ##### Responses
@@ -308,11 +431,11 @@ Furthermore, users can query the latest data or data from a preferred time perio
 > | http code | content-type | response |
 > |-----------|--------------|----------|
 > | `201` | `application/json` | `{"topicsAdded": 1, "topics": ["air"]}` |
-> | `400`         | `application/json`                | `{"message": "Validation failed","statusCode": 400}`|
-> | `400`         | `application/json`         | `{"message": "Topics are already registered","statusCode": 400}`|
-> | `401`         | `application/json`         | `{"message": "Unauthorized","statusCode": 401}`|
-> | `404`         | `application/json`         | `{"message": "Device with id {{deviceId}} was not found for user with id {{userId}}","statusCode": 404}`|
-> | `404`         | `application/json`         | `{"message": "User not found","statusCode": 404}`|
+> | `400` | `application/json` | `{"message": "Validation failed","statusCode": 400}` |
+> | `400` | `application/json` | `{"message": "Topics are already registered","statusCode": 400}`|
+> | `401` | `application/json` | `{"message": "Unauthorized","statusCode": 401}` |
+> | `404` | `application/json` | `{"message": "Device with id {{deviceId}} was not found for user with id {{userId}}","statusCode": 404}` |
+> | `404` | `application/json` | `{"message": "User not found","statusCode": 404}` |
 
 ##### Example cURL
 
@@ -332,9 +455,9 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 ##### Authentication
 
-> | header      |  type    | description   |      
-> |-----------|-----------|-------------------------|
-> | Authorization   | Bearer {{JWT_TOKEN}} | Get from /auth/login
+> | header | type | description |      
+> |--------|------|-------------|
+> | `Authorization` | Bearer {{JWT_TOKEN}} | Get from /auth/login |
 
 
 ##### Parameters
@@ -345,9 +468,9 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 ##### Body
 
-> | name      |  type     | data type               | description                                                           |
-> |-----------|-----------|-------------------------|-----------------------------------------------------------------------|
-> | topics  | required | string or string[] | topics to be removed |
+> | name | type | data type | description |
+> |------|------|-----------|-------------|
+> | `topics` | required | string or string[] | topics to be removed |
 
 
 ##### Responses
@@ -355,11 +478,11 @@ Furthermore, users can query the latest data or data from a preferred time perio
 > | http code | content-type | response |
 > |-----------|--------------|----------|
 > | `201` | `application/json` | `{"topicsRemoved": 1, "topics": ["air"]}` |
-> | `400`         | `application/json`                | `{"message": "Validation failed","statusCode": 400}`|
-> | `400`         | `application/json`         | `{"message": "Topics are not registered","statusCode": 400}`|
-> | `401`         | `application/json`         | `{"message": "Unauthorized","statusCode": 401}`|
-> | `404`         | `application/json`         | `{"message": "Device with id {{deviceId}} was not found for user with id {{userId}}","statusCode": 404}`|
-> | `404`         | `application/json`         | `{"message": "User not found","statusCode": 404}`|
+> | `400` | `application/json` | `{"message": "Validation failed","statusCode": 400}` |
+> | `400` | `application/json` | `{"message": "Topics are not registered","statusCode": 400}` |
+> | `401` | `application/json` | `{"message": "Unauthorized","statusCode": 401}` |
+> | `404` | `application/json` | `{"message": "Device with id {{deviceId}} was not found for user with id {{userId}}","statusCode": 404}` |
+> | `404` | `application/json` | `{"message": "User not found","statusCode": 404}` |
 
 ##### Example cURL
 
@@ -376,47 +499,6 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 ----------------------------------------------
 
-#### List User Owned Devices
-
-<details>
- <summary><code>GET</code> <code><b>/devices</b></code> <code>(List every devices registered by current user)</code></summary>
-
-##### Authentication
-
-> | header      |  type    | description   |      
-> |-----------|-----------|-------------------------|
-> | Authorization   | Bearer {{JWT_TOKEN}} | Get from /auth/login
-
-
-##### Parameters
-
-> None
-
-##### Body
-
-> None
-
-
-##### Responses
-
-> | http code | content-type | response |
-> |-----------|--------------|----------|
-> | `200` | `application/json` | `[{"id": 1, "name": "device1", "userId": 1,  "topics": ["temp", "rh"]}]` |
-> | `401`         | `application/json`         | `{"message": "Unauthorized","statusCode": 401}`|
-> | `404`         | `application/json`         | `{"message": "No devices found","statusCode": 404}`|
-
-##### Example cURL
-
-> ```javascript
-> curl --location 'http://localhost:3000/devices' \
-> --header 'Authorization: Bearer {{JWT_TOKEN}}'
-> ```
-
-</details>
-
-
-----------------------------------------------
-
 #### Sending Sensor Data to a Topic
 
 <details>
@@ -426,7 +508,7 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 > | header | type | description |      
 > |--------|------|-------------|
-> | Authorization   | Bearer {{JWT_TOKEN}} | Get from /auth/login |
+> | `Authorization` | Bearer {{JWT_TOKEN}} | Get from /auth/login |
 
 ##### Parameters
 
@@ -439,7 +521,7 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 > | name | type | data type | description |
 > |------|------|-----------|-------------|
-> | payload | required | object or object[] | `{timestamp: {{iso_timestamp}}, value: {{number}}}` |
+> | `payload` | required | object or object[] | `{timestamp: {{iso_timestamp}}, value: {{number}}}` |
 
 
 ##### Responses
@@ -447,11 +529,11 @@ Furthermore, users can query the latest data or data from a preferred time perio
 > | http code | content-type | response |
 > |-----------|--------------|----------|
 > | `201` | `application/json` | `[{ "timestamp": {{iso_timestamp}},"value":{{number}} }, ...]` |
-> | `400`         | `application/json`                | `{"message": "Validation failed","statusCode": 400}`|
-> | `401`         | `application/json`         | `{"message": "Unauthorized","statusCode": 401}`|
-> | `401`         | `application/json`         | `{"message": "Requester is not the owner of the device","statusCode": 401}`|
-> | `404`         | `application/json`         | `{"message": "Device with id {{device_id}} was not found","statusCode": 404}`|
-> | `404`         | `application/json`         | `{"message": "User not found","statusCode": 404}`|
+> | `400` | `application/json` | `{"message": "Validation failed","statusCode": 400}` |
+> | `401` | `application/json` | `{"message": "Unauthorized","statusCode": 401}` |
+> | `401` | `application/json` | `{"message": "Requester is not the owner of the device","statusCode": 401}` |
+> | `404` | `application/json` | `{"message": "Device with id {{device_id}} was not found","statusCode": 404}` |
+> | `404` | `application/json` | `{"message": "User not found","statusCode": 404}` |
 
 ##### Example cURL
 
@@ -500,7 +582,7 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 > | header | type | description |      
 > |--------|------|-------------|
-> | Authorization   | Bearer {{JWT_TOKEN}} | Get from /auth/login |
+> | `Authorization` | Bearer {{JWT_TOKEN}} | Get from /auth/login |
 
 ##### Parameters
 
@@ -513,7 +595,7 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 > | name | type | data type | description |
 > |------|------|-----------|-------------|
-> | `unix` | optional | boolean | true if want timestamp body to be in unix timestamp otherwise in iso timestamp (default) |
+> | `unix` | optional | boolean | true if want timestamp (ms) body to be in unix timestamp otherwise in iso timestamp (default) |
 
 ##### Body
 
@@ -525,11 +607,11 @@ Furthermore, users can query the latest data or data from a preferred time perio
 > | http code | content-type | response |
 > |-----------|--------------|----------|
 > | `200` | `application/json` | `{ "timestamp": {{iso/unix_timestamp}},"value":{{number}} }` |
-> | `401`         | `application/json`         | `{"message": "Unauthorized","statusCode": 401}`|
-> | `401`         | `application/json`         | `{"message": "Requester is not the owner of the device","statusCode": 401}`|
-> | `404`         | `application/json`         | `{"message": "Device with id {{device_id}} was not found","statusCode": 404}`|
-> | `404`         | `application/json`         | `{"message": "User not found","statusCode": 404}`|
-> | `404`         | `application/json`         | `{"message": "No Latest Data Found","statusCode": 404}`|
+> | `401` | `application/json` | `{"message": "Unauthorized","statusCode": 401}` |
+> | `401` | `application/json` | `{"message": "Requester is not the owner of the device","statusCode": 401}` |
+> | `404` | `application/json` | `{"message": "Device with id {{device_id}} was not found","statusCode": 404}` |
+> | `404` | `application/json` | `{"message": "User not found","statusCode": 404}` |
+> | `404` | `application/json` | `{"message": "No Latest Data Found","statusCode": 404}` |
 
 ##### Example cURL
 
@@ -556,7 +638,7 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 > | header | type | description |      
 > |--------|------|-------------|
-> | Authorization   | Bearer {{JWT_TOKEN}} | Get from /auth/login |
+> | `Authorization` | Bearer {{JWT_TOKEN}} | Get from /auth/login |
 
 ##### Parameters
 
@@ -569,14 +651,14 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 > | name | type | data type | description |
 > |------|------|-----------|-------------|
-> | `unix` | optional | boolean | true if want timestamp body to be in unix timestamp otherwise in iso timestamp (default) |
+> | `unix` | optional | boolean | true if want timestamp body to be in unix timestamp (ms) otherwise in iso timestamp (default) |
+> | `from` | required | ISO String Datetime or Unix Timestamp (ms) | datetime indicating the starting point of requested data |
+> | `to`   | required | ISO String Datetime or Unix Timestamp (ms) |  datetime indicating the end of requested data |
 
 ##### Body
 
-> | name | type | data type | description |
-> |------|------|-----------|-------------|
-> | from | required | ISO String Datetime | datetime indicating the starting point of requested data |
-> | to   | required | ISO String Datetime |  datetime indicating the end of requested data |
+> None
+
 
 
 ##### Responses
@@ -584,22 +666,18 @@ Furthermore, users can query the latest data or data from a preferred time perio
 > | http code | content-type | response |
 > |-----------|--------------|----------|
 > | `200` | `application/json` | `[{ "timestamp": {{iso/unix_timestamp}},"value":{{number}}, ...]}` |
-> | `401`         | `application/json`         | `{"message": "Unauthorized","statusCode": 401}`|
-> | `401`         | `application/json`         | `{"message": "Requester is not the owner of the device","statusCode": 401}`|
-> | `404`         | `application/json`         | `{"message": "Device with id {{device_id}} was not found","statusCode": 404}`|
-> | `404`         | `application/json`         | `{"message": "User not found","statusCode": 404}`|
-> | `404`         | `application/json`         | `{"message": "No Data Found From The Given Period","statusCode": 404}`|
+> | `401` | `application/json` | `{"message": "Unauthorized","statusCode": 401}` |
+> | `401` | `application/json` | `{"message": "Requester is not the owner of the device","statusCode": 401}` |
+> | `404` | `application/json` | `{"message": "Device with id {{device_id}} was not found","statusCode": 404}` |
+> | `404` | `application/json` | `{"message": "User not found","statusCode": 404}` |
+> | `404` | `application/json` | `{"message": "No Data Found From The Given Period","statusCode": 404}` |
 
 ##### Example cURL
 
 > ```javascript
-> curl --location 'http://localhost:3000/devices/1/temp/periodic' \
+> curl --location 'http://localhost:3000/devices/1/temp/periodic?from=2024-10-18T11:03:28.273Z&to=2024-10-18T11:05:28.273Z' \
 > --header 'Authorization: Bearer {{JWT_TOKEN}}' \
-> --header 'Content-Type: application/json' \
-> --data '{
->    "from": "2024-10-18T11:03:28.273Z",
->    "to": "2024-10-18T11:05:28.273Z"
->}'
+> --header 'Content-Type: application/json'
 > ```
 
 #### Example Response

@@ -1,6 +1,6 @@
 {
-  "api-gateway": "0.0.3-alpha",
-  "auth-service": "0.0.3-alpha",
-  "user-service": "0.0.3-alpha",
-  "sensor-data-service": "0.0.3-alpha"
+  "api-gateway": "0.0.5-alpha",
+  "auth-service": "0.0.4-alpha",
+  "user-service": "0.0.4-alpha",
+  "sensor-data-service": "0.0.4-alpha"
 }

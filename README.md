@@ -26,8 +26,8 @@ Furthermore, users can query the latest data or data from a preferred time perio
 - :white_check_mark: Migrate User/Device/Topic to SQL DB
 - :white_check_mark: Dockerize / Compose
 - :white_check_mark: Caching
-- :black_square_button: JWT Refresh/Access Token
-- :black_square_button: JWT Cookie
+- :white_check_mark: JWT Refresh/Access Token
+- :white_check_mark: JWT Cookie
 - :black_square_button: API Key for Devices Data
 - :black_square_button: Swagger UI Page
 - :black_square_button: e2e Test
@@ -98,9 +98,9 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 ##### Authentication
 
-> | header | type | description |      
+> | cookie key | type | description |      
 > |--------|------|-------------|
-> | `Authorization` | Bearer {{JWT_TOKEN}} | Get from /auth/login |
+> | `accessToken` | string | a JWT Token Set from `/auth/login` or `/auth/refresh` |
 
 
 ##### Parameters
@@ -127,7 +127,7 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 > ```javascript
 > curl --location --request DELETE 'http://localhost:3000/users' \
-> --header 'Authorization: Bearer {{JWT_TOKEN}}' \
+> --header 'Cookie: accessToken={{JWT_TOKEN}}' \
 > --header 'Content-Type: application/json' \
 > --data '{
 >    "password": "world"
@@ -143,9 +143,9 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 ##### Authentication
 
-> | header | type | description |      
+> | cookie key | type | description |      
 > |--------|------|-------------|
-> | `Authorization` | Bearer {{JWT_TOKEN}} | Get from /auth/login |
+> | `accessToken` | string | a JWT Token Set from `/auth/login` or `/auth/refresh` |
 
 
 ##### Parameters
@@ -172,7 +172,7 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 > ```javascript
 > curl --location --request DELETE 'http://localhost:3000/users/1' \
-> --header 'Authorization: Bearer {{JWT_TOKEN}}' \
+> --header 'Cookie: accessToken={{JWT_TOKEN}}' \
 > --header 'Content-Type: application/json'
 > ```
 
@@ -185,7 +185,7 @@ Furthermore, users can query the latest data or data from a preferred time perio
 #### Login
 
 <details>
- <summary><code>POST</code> <code><b>/auth/login</b></code> <code>(Login and get JWT Token)</code></summary>
+ <summary><code>POST</code> <code><b>/auth/login</b></code> <code>(Login and set access token and refresh token cookies)</code></summary>
 
 ##### Authentication
 
@@ -207,7 +207,7 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 > | http code | content-type | response |
 > |-----------|--------------|----------|
-> | `200` | `application/json` | `{"accessToken": {{JWT_TOKEN}}}` |
+> | `200` | `application/json` | `None` |
 > | `400` | `application/json` | `{"message": "Validation failed","statusCode": 400}` |
 > | `401` | `application/json` | `{"message": "Incorrect password","statusCode": 401}` |
 > | `404` | `application/json` | `{"message": "User doesn't exist","statusCode": 404}` |
@@ -225,6 +225,43 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 </details>
 
+#### Refresh new access token
+
+<details>
+ <summary><code>GET</code> <code><b>/auth/refresh</b></code> <code>(set new access token cookie)</code></summary>
+
+##### Authentication
+
+> | cookie key | type | description |      
+> |--------|------|-------------|
+> | `refreshToken` | string | a Refresh JWT Token Set from `/auth/login` |
+
+##### Parameters
+
+> None
+
+##### Body
+
+> None
+
+##### Responses
+
+> | http code | content-type | response |
+> |-----------|--------------|----------|
+> | `200` | `application/json` | `None` |
+> | `400` | `application/json` | `{"message": "Validation failed","statusCode": 400}` |
+> | `401` | `application/json` | `{"message": "Unauthorized", "statusCode": 401}` |
+
+##### Example cURL
+
+> ```javascript
+> curl --location 'http://localhost:3000/auth/login' \
+> --header 'Cookie: refreshToken={{JWT_TOKEN}}' \
+> --header 'Content-Type: application/json'
+> ```
+
+</details>
+
 ------------------------------------------------------
 
 ### Devices
@@ -236,9 +273,9 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 ##### Authentication
 
-> | header | type | description |      
+> | cookie key | type | description |      
 > |--------|------|-------------|
-> | `Authorization` | Bearer {{JWT_TOKEN}} | Get from /auth/login |
+> | `accessToken` | string | a JWT Token Set from `/auth/login` or `/auth/refresh` |
 
 ##### Parameters
 
@@ -265,7 +302,7 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 > ```javascript
 > curl --location 'http://localhost:3000/devices' \
-> --header 'Authorization: Bearer {{JWT_TOKEN}}' \
+> --header 'Cookie: accessToken={{JWT_TOKEN}}' \
 > --header 'Content-Type: application/json' \
 > --data '{
 >    "name": "device1",
@@ -280,9 +317,9 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 ##### Authentication
 
-> | header | type | description |      
+> | cookie key | type | description |      
 > |--------|------|-------------|
-> | `Authorization` | Bearer {{JWT_TOKEN}} | Get from /auth/login
+> | `accessToken` | string | a JWT Token Set from `/auth/login` or `/auth/refresh` |
 
 
 ##### Parameters
@@ -310,7 +347,7 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 > ```javascript
 > curl --location --request DELETE 'http://localhost:3000/devices' \
-> --header 'Authorization: Bearer {{JWT_TOKEN}}' \
+> --header 'Cookie: accessToken={{JWT_TOKEN}}' \
 > --header 'Content-Type: application/json' \
 > --data '{
 >    "id": "1"
@@ -326,9 +363,9 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 ##### Authentication
 
-> | header | type | description |      
+> | cookie key | type | description |      
 > |--------|------|-------------|
-> | `Authorization` | Bearer {{JWT_TOKEN}} | Get from /auth/login |
+> | `accessToken` | string | a JWT Token Set from `/auth/login` or `/auth/refresh` |
 
 
 ##### Parameters
@@ -356,7 +393,7 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 > ```javascript
 > curl --location --request DELETE 'http://localhost:3000/devices/1' \
-> --header 'Authorization: Bearer {{JWT_TOKEN}}' \
+> --header 'Cookie: accessToken={{JWT_TOKEN}}' \
 > --header 'Content-Type: application/json'
 > ```
 
@@ -369,9 +406,9 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 ##### Authentication
 
-> | header | type | description |      
+> | cookie key | type | description |      
 > |--------|------|-------------|
-> | `Authorization` | Bearer {{JWT_TOKEN}} | Get from /auth/login |
+> | `accessToken` | string | a JWT Token Set from `/auth/login` or `/auth/refresh` |
 
 
 ##### Parameters
@@ -395,7 +432,7 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 > ```javascript
 > curl --location 'http://localhost:3000/devices' \
-> --header 'Authorization: Bearer {{JWT_TOKEN}}'
+> --header 'Cookie: accessToken={{JWT_TOKEN}}'
 > ```
 
 </details>
@@ -409,9 +446,9 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 ##### Authentication
 
-> | header | type | description |      
+> | cookie key | type | description |      
 > |--------|------|-------------|
-> | `Authorization` | Bearer {{JWT_TOKEN}} | Get from /auth/login |
+> | `accessToken` | string | a JWT Token Set from `/auth/login` or `/auth/refresh` |
 
 ##### Parameters
 
@@ -441,7 +478,7 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 > ```javascript
 > curl --location 'http://localhost:3000/devices/1/topics' \
-> --header 'Authorization: Bearer {{JWT_TOKEN}}' \
+> --header 'Cookie: accessToken={{JWT_TOKEN}}' \
 > --header 'Content-Type: application/json' \
 > --data '{
 >    "topics": "air"
@@ -455,9 +492,9 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 ##### Authentication
 
-> | header | type | description |      
+> | cookie key | type | description |      
 > |--------|------|-------------|
-> | `Authorization` | Bearer {{JWT_TOKEN}} | Get from /auth/login |
+> | `accessToken` | string | a JWT Token Set from `/auth/login` or `/auth/refresh` |
 
 
 ##### Parameters
@@ -488,7 +525,7 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 > ```javascript
 > curl --location --request DELETE 'http://localhost:3000/devices/1/topics' \
-> --header 'Authorization: Bearer {{JWT_TOKEN}}' \
+> --header 'Cookie: accessToken={{JWT_TOKEN}}' \
 > --header 'Content-Type: application/json' \
 > --data '{
 >    "topics": "air"
@@ -506,9 +543,9 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 ##### Authentication
 
-> | header | type | description |      
+> | cookie key | type | description |      
 > |--------|------|-------------|
-> | `Authorization` | Bearer {{JWT_TOKEN}} | Get from /auth/login |
+> | `accessToken` | string | a JWT Token Set from `/auth/login` or `/auth/refresh` |
 
 ##### Parameters
 
@@ -539,7 +576,7 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 > ```javascript
 > curl --location 'http://localhost:3000/devices/1/temp' \
-> --header 'Authorization: Bearer {{JWT_TOKEN}}' \
+> --header 'Cookie: accessToken={{JWT_TOKEN}}' \
 > --header 'Content-Type: application/json' \
 > --data '{
 >   "payload": [
@@ -580,9 +617,9 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 ##### Authentication
 
-> | header | type | description |      
+> | cookie key | type | description |      
 > |--------|------|-------------|
-> | `Authorization` | Bearer {{JWT_TOKEN}} | Get from /auth/login |
+> | `accessToken` | string | a JWT Token Set from `/auth/login` or `/auth/refresh` |
 
 ##### Parameters
 
@@ -617,7 +654,7 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 > ```javascript
 > curl --location 'http://localhost:3000/devices/1/temp/latest' \
-> --header 'Authorization: Bearer {{JWT_TOKEN}}'
+> --header 'Cookie: accessToken={{JWT_TOKEN}}'
 > ```
 
 #### Example Response
@@ -636,9 +673,9 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 ##### Authentication
 
-> | header | type | description |      
+> | cookie key | type | description |      
 > |--------|------|-------------|
-> | `Authorization` | Bearer {{JWT_TOKEN}} | Get from /auth/login |
+> | `accessToken` | string | a JWT Token Set from `/auth/login` or `/auth/refresh` |
 
 ##### Parameters
 
@@ -676,7 +713,7 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 > ```javascript
 > curl --location 'http://localhost:3000/devices/1/temp/periodic?from=2024-10-18T11:03:28.273Z&to=2024-10-18T11:05:28.273Z' \
-> --header 'Authorization: Bearer {{JWT_TOKEN}}' \
+> --header 'Cookie: accessToken={{JWT_TOKEN}}' \
 > --header 'Content-Type: application/json'
 > ```
 

@@ -11,12 +11,25 @@
 			"item": [
 				{
 					"name": "Register New User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var responseBody = pm.response.json();\r",
+									"pm.collectionVariables.set(\"userId\", responseBody.id);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"hello\",\r\n    \"password\": \"world\"\r\n}",
+							"raw": "{\r\n    \"username\": \"{{username}}\",\r\n    \"password\": \"{{password}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -32,18 +45,6 @@
 							"port": "3000",
 							"path": [
 								"users"
-							],
-							"query": [
-								{
-									"key": "username",
-									"value": "helloworld",
-									"disabled": true
-								},
-								{
-									"key": "password",
-									"value": "foobar",
-									"disabled": true
-								}
 							]
 						}
 					},
@@ -53,19 +54,13 @@
 					"name": "Delete User",
 					"request": {
 						"method": "DELETE",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{JWT token}}",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"body": {
 							"mode": "urlencoded",
 							"urlencoded": [
 								{
 									"key": "password",
-									"value": "world",
+									"value": "{{password}}",
 									"type": "text"
 								}
 							]
@@ -79,18 +74,26 @@
 							"port": "3000",
 							"path": [
 								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Detail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/users/{{userId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
 							],
-							"query": [
-								{
-									"key": "username",
-									"value": "helloworld",
-									"disabled": true
-								},
-								{
-									"key": "password",
-									"value": "foobar",
-									"disabled": true
-								}
+							"port": "3000",
+							"path": [
+								"users",
+								"{{userId}}"
 							]
 						}
 					},
@@ -109,7 +112,7 @@
 							"script": {
 								"exec": [
 									"var responseBody = pm.response.json();\r",
-									"pm.collectionVariables.set(\"JWT token\", responseBody.accessToken);"
+									"pm.collectionVariables.set(\"userId\", responseBody.id);"
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -124,12 +127,12 @@
 							"urlencoded": [
 								{
 									"key": "username",
-									"value": "hello",
+									"value": "{{username}}",
 									"type": "text"
 								},
 								{
 									"key": "password",
-									"value": "world",
+									"value": "{{password}}",
 									"type": "text"
 								}
 							]
@@ -144,18 +147,39 @@
 							"path": [
 								"auth",
 								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh Access Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var responseBody = pm.response.json();\r",
+									"pm.collectionVariables.set(\"userId\", responseBody.id);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/auth/refresh",
+							"protocol": "http",
+							"host": [
+								"localhost"
 							],
-							"query": [
-								{
-									"key": "username",
-									"value": "helloworld",
-									"disabled": true
-								},
-								{
-									"key": "password",
-									"value": "foobar",
-									"disabled": true
-								}
+							"port": "3000",
+							"path": [
+								"auth",
+								"refresh"
 							]
 						}
 					},
@@ -170,7 +194,7 @@
 					"name": "Registration",
 					"item": [
 						{
-							"name": "Register New Device",
+							"name": "Register New Single Device",
 							"event": [
 								{
 									"listen": "test",
@@ -186,13 +210,7 @@
 							],
 							"request": {
 								"method": "POST",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer {{JWT token}}",
-										"type": "text"
-									}
-								],
+								"header": [],
 								"body": {
 									"mode": "raw",
 									"raw": "{\r\n    \"name\": \"device1\",\r\n    \"topics\": [\"temp\",\"rh\"]\r\n}",
@@ -211,34 +229,16 @@
 									"port": "3000",
 									"path": [
 										"devices"
-									],
-									"query": [
-										{
-											"key": "username",
-											"value": "helloworld",
-											"disabled": true
-										},
-										{
-											"key": "password",
-											"value": "foobar",
-											"disabled": true
-										}
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "Remove Device",
+							"name": "Remove Single Device",
 							"request": {
 								"method": "DELETE",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer {{JWT token}}",
-										"type": "text"
-									}
-								],
+								"header": [],
 								"body": {
 									"mode": "raw",
 									"raw": "{\r\n    \"id\": {{device_id}}\r\n}",
@@ -257,18 +257,57 @@
 									"port": "3000",
 									"path": [
 										"devices"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Devices Detail",
+					"item": [
+						{
+							"name": "List Device Registered by a Current User",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:3000/devices",
+									"protocol": "http",
+									"host": [
+										"localhost"
 									],
-									"query": [
-										{
-											"key": "username",
-											"value": "helloworld",
-											"disabled": true
-										},
-										{
-											"key": "password",
-											"value": "foobar",
-											"disabled": true
-										}
+									"port": "3000",
+									"path": [
+										"devices"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Device Detail",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/devices/{{device_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"devices",
+										"{{device_id}}"
 									]
 								}
 							},
@@ -283,13 +322,7 @@
 							"name": "Add a Single Topic to a Device",
 							"request": {
 								"method": "POST",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer {{JWT token}}",
-										"type": "text"
-									}
-								],
+								"header": [],
 								"body": {
 									"mode": "raw",
 									"raw": "{\r\n    \"topics\": \"air\"\r\n}",
@@ -310,18 +343,6 @@
 										"devices",
 										"{{device_id}}",
 										"topics"
-									],
-									"query": [
-										{
-											"key": "username",
-											"value": "helloworld",
-											"disabled": true
-										},
-										{
-											"key": "password",
-											"value": "foobar",
-											"disabled": true
-										}
 									]
 								}
 							},
@@ -331,13 +352,7 @@
 							"name": "Add Multiple Topics to a Device Copy",
 							"request": {
 								"method": "POST",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer {{JWT token}}",
-										"type": "text"
-									}
-								],
+								"header": [],
 								"body": {
 									"mode": "raw",
 									"raw": "{\r\n    \"topics\": [\"air\",\"speed\"]\r\n}",
@@ -358,18 +373,6 @@
 										"devices",
 										"{{device_id}}",
 										"topics"
-									],
-									"query": [
-										{
-											"key": "username",
-											"value": "helloworld",
-											"disabled": true
-										},
-										{
-											"key": "password",
-											"value": "foobar",
-											"disabled": true
-										}
 									]
 								}
 							},
@@ -379,13 +382,7 @@
 							"name": "Remove a Single Topic from a Device",
 							"request": {
 								"method": "DELETE",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer {{JWT token}}",
-										"type": "text"
-									}
-								],
+								"header": [],
 								"body": {
 									"mode": "raw",
 									"raw": "{\r\n    \"topics\": \"rh\"\r\n}",
@@ -406,18 +403,6 @@
 										"devices",
 										"{{device_id}}",
 										"topics"
-									],
-									"query": [
-										{
-											"key": "username",
-											"value": "helloworld",
-											"disabled": true
-										},
-										{
-											"key": "password",
-											"value": "foobar",
-											"disabled": true
-										}
 									]
 								}
 							},
@@ -427,16 +412,10 @@
 							"name": "Remove Multiple Topics from a Device",
 							"request": {
 								"method": "DELETE",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer {{JWT token}}",
-										"type": "text"
-									}
-								],
+								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"topics\": [\"air\",\"speed\",\"temp\"]\r\n}",
+									"raw": "{\r\n    \"topics\": [\"air\",\"speed\"]\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -454,18 +433,6 @@
 										"devices",
 										"{{device_id}}",
 										"topics"
-									],
-									"query": [
-										{
-											"key": "username",
-											"value": "helloworld",
-											"disabled": true
-										},
-										{
-											"key": "password",
-											"value": "foobar",
-											"disabled": true
-										}
 									]
 								}
 							},
@@ -492,16 +459,10 @@
 							],
 							"request": {
 								"method": "POST",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer {{JWT token}}",
-										"type": "text"
-									}
-								],
+								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"payload\": {\r\n        \"timestamp\": \"{{$isoTimestamp}}\",\r\n        \"value\" : 1\r\n    }\r\n}",
+									"raw": "{\r\n    \"payload\": {\r\n        \"timestamp\": {{$timestamp}}000,\r\n        \"value\" : 2\r\n    }\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -519,18 +480,6 @@
 										"devices",
 										"{{device_id}}",
 										"temp"
-									],
-									"query": [
-										{
-											"key": "username",
-											"value": "helloworld",
-											"disabled": true
-										},
-										{
-											"key": "password",
-											"value": "foobar",
-											"disabled": true
-										}
 									]
 								}
 							},
@@ -552,13 +501,7 @@
 							],
 							"request": {
 								"method": "POST",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer {{JWT token}}",
-										"type": "text"
-									}
-								],
+								"header": [],
 								"body": {
 									"mode": "raw",
 									"raw": "{\r\n    \"payload\": {\r\n        \"value\" : 1\r\n    }\r\n}",
@@ -579,18 +522,6 @@
 										"devices",
 										"{{device_id}}",
 										"temp"
-									],
-									"query": [
-										{
-											"key": "username",
-											"value": "helloworld",
-											"disabled": true
-										},
-										{
-											"key": "password",
-											"value": "foobar",
-											"disabled": true
-										}
 									]
 								}
 							},
@@ -609,7 +540,7 @@
 											"const timestamp2_offset = 2\r",
 											"const timestamp3_offset = 3\r",
 											"\r",
-											"const timestamp1 = new Date( Date.now() - 60000 * timestamp1_offset );\r",
+											"const timestamp1 = new Date( Date.now() - 60000 * timestamp1_offset ).getTime();\r",
 											"const timestamp2 = new Date( Date.now() - 60000 * timestamp2_offset );\r",
 											"const timestamp3 = new Date( Date.now() - 60000 * timestamp3_offset );\r",
 											"\r",
@@ -624,16 +555,10 @@
 							],
 							"request": {
 								"method": "POST",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer {{JWT token}}",
-										"type": "text"
-									}
-								],
+								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"payload\": [\r\n        {\r\n            \"value\": 0\r\n        },\r\n        {\r\n            \"timestamp\": \"{{timestamp1}}\",\r\n            \"value\" : 1\r\n        },\r\n        {\r\n            \"timestamp\": \"{{timestamp2}}\",\r\n            \"value\" : 2\r\n        },\r\n        {\r\n            \"timestamp\": \"{{timestamp3}}\",\r\n            \"value\" : 3\r\n        }\r\n    ]\r\n}",
+									"raw": "{\r\n    \"payload\": [\r\n        {\r\n            \"value\": 0\r\n        },\r\n        {\r\n            \"timestamp\": {{timestamp1}},\r\n            \"value\" : 1\r\n        },\r\n        {\r\n            \"timestamp\": \"{{timestamp2}}\",\r\n            \"value\" : 2\r\n        },\r\n        {\r\n            \"timestamp\": \"{{timestamp3}}\",\r\n            \"value\" : 3\r\n        }\r\n    ]\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -651,18 +576,6 @@
 										"devices",
 										"{{device_id}}",
 										"temp"
-									],
-									"query": [
-										{
-											"key": "username",
-											"value": "helloworld",
-											"disabled": true
-										},
-										{
-											"key": "password",
-											"value": "foobar",
-											"disabled": true
-										}
 									]
 								}
 							},
@@ -675,13 +588,7 @@
 							},
 							"request": {
 								"method": "GET",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer {{JWT token}}",
-										"type": "text"
-									}
-								],
+								"header": [],
 								"body": {
 									"mode": "raw",
 									"raw": "",
@@ -692,7 +599,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:3000/devices/{{device_id}}/temp/latest",
+									"raw": "http://localhost:3000/devices/{{device_id}}/temp/latest?unix=true",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -706,14 +613,8 @@
 									],
 									"query": [
 										{
-											"key": "username",
-											"value": "helloworld",
-											"disabled": true
-										},
-										{
-											"key": "password",
-											"value": "foobar",
-											"disabled": true
+											"key": "unix",
+											"value": "true"
 										}
 									]
 								}
@@ -732,7 +633,7 @@
 											"\r",
 											"const date_from = new Date( Date.now() - 60000 * from_past_min );\r",
 											"const date_to = new Date( Date.now() - 60000 * to_past_min );\r",
-											"pm.collectionVariables.set(\"date_from\", date_from);\r",
+											"pm.collectionVariables.set(\"date_from\", date_from.getTime());\r",
 											"pm.collectionVariables.set(\"date_to\", date_to);"
 										],
 										"type": "text/javascript",
@@ -745,16 +646,10 @@
 							},
 							"request": {
 								"method": "GET",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer {{JWT token}}",
-										"type": "text"
-									}
-								],
+								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"from\": \"{{date_from}}\",\r\n    \"to\": \"{{date_to}}\"\r\n}",
+									"raw": "",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -762,7 +657,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:3000/devices/{{device_id}}/temp/periodic",
+									"raw": "http://localhost:3000/devices/{{device_id}}/temp/periodic?from={{date_from}}&to={{date_to}}&unix=true",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -776,63 +671,16 @@
 									],
 									"query": [
 										{
-											"key": "username",
-											"value": "helloworld",
-											"disabled": true
+											"key": "from",
+											"value": "{{date_from}}"
 										},
 										{
-											"key": "password",
-											"value": "foobar",
-											"disabled": true
-										}
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "List",
-					"item": [
-						{
-							"name": "List Device Registered by a Current User",
-							"protocolProfileBehavior": {
-								"disableBodyPruning": true
-							},
-							"request": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer {{JWT token}}",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
-								"url": {
-									"raw": "http://localhost:3000/devices",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "3000",
-									"path": [
-										"devices"
-									],
-									"query": [
-										{
-											"key": "username",
-											"value": "helloworld",
-											"disabled": true
+											"key": "to",
+											"value": "{{date_to}}"
 										},
 										{
-											"key": "password",
-											"value": "foobar",
-											"disabled": true
+											"key": "unix",
+											"value": "true"
 										}
 									]
 								}
@@ -898,8 +746,18 @@
 			"value": ""
 		},
 		{
-			"key": "id",
+			"key": "userId",
 			"value": ""
+		},
+		{
+			"key": "username",
+			"value": "justanormaluser",
+			"type": "default"
+		},
+		{
+			"key": "password",
+			"value": "justanormalpassword",
+			"type": "default"
 		}
 	]
 }

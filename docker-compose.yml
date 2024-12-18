@@ -16,6 +16,9 @@ services:
       COOKIE_REFRESH_TOKEN_EXP: ${JWT_REFRESH_EXPIRATION}
     ports:
       - ${API_GATEWAY_PORT}:${API_GATEWAY_PORT}
+    depends_on:
+      - redis-cache
+      - rabbitmq
 
   auth-service:
     image: simple-iot-auth-service:${VERSION_AUTH_SERVICE}
@@ -27,6 +30,8 @@ services:
       JWT_ACCESS_EXPIRATION: ${JWT_ACCESS_EXPIRATION}
       JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
       JWT_REFRESH_EXPIRATION: ${JWT_REFRESH_EXPIRATION}
+    depends_on:
+      - rabbitmq
   
   user-service:
     image: simple-iot-user-service:${VERSION_USER_SERVICE}
@@ -40,7 +45,11 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
+      API_PORT: ${USER_SERVICE_API_PORT}
+    expose:
+      - ${USER_SERVICE_API_PORT}
     depends_on:
+      - rabbitmq
       - mysql
 
   sensor-data-service:
@@ -52,7 +61,22 @@ services:
       RMQ_USER_QUEUE: ${RMQ_USER_QUEUE}
       MONGODB_URI: ${MONGODB_URI}
     depends_on:
+      - rabbitmq
       - mongodb
+  
+  sensor-data-mqtt-adaptor:
+    image: simple-iot-sensor-data-mqtt-adaptor:${VERSION_SENSOR_DATA_MQTT_ADAPTOR}
+    build: ./simple-iot-sensor-data-mqtt-adaptor
+    environment:
+      RMQ_URL: ${RMQ_URL}
+      RMQ_SENSOR_DATA_QUEUE: ${RMQ_SENSOR_DATA_QUEUE}
+      RMQ_USER_QUEUE: ${RMQ_USER_QUEUE}
+      MQTT_URL: ${MQTT_URL}
+      MQTT_USERNAME: ${MQTT_USERNAME}
+      MQTT_PASSWORD: ${MQTT_PASSWORD}
+    depends_on:
+      - rabbitmq
+      - mqtt-broker-emqx
 
   rabbitmq:
     image: rabbitmq:3.11-management-alpine
@@ -90,7 +114,53 @@ services:
     command: redis-server --requirepass ${REDIS_PASSWORD}
     ports:
       - ${REDIS_PORT}:${REDIS_PORT}
+  
+  mqtt-broker-emqx:
+    image: emqx:5.8.3
+    environment:
+      EMQX_AUTHENTICATION: >
+        [
+          {
+            "enable": true,
+            "backend": "built_in_database",
+            "mechanism": "password_based"
+          },
+          {
+            "enable": true,
+            "backend": "http",
+            "method": "post",
+            "mechanism": "password_based",
+            "url": "${USER_SERVICE_MQTT_AUTH_URL}",
+            "body": {
+              "username": "$${username}",
+              "password": "$${password}"
+            }
+          }
+        ]
+      EMQX_DASHBOARD__DEFAULT_PASSWORD: ${MQTT_DASHBOARD_PASSWORD}
+    healthcheck:
+      test: ["CMD", "/opt/emqx/bin/emqx", "ctl", "status"]
+      interval: 5s
+      timeout: 25s
+      retries: 5
+    ports:
+      - ${MQTT_PORT}:${MQTT_PORT}
+      - ${MQTT_DASHBOARD_PORT}:${MQTT_DASHBOARD_PORT}
+    volumes:
+      - emqx-data:/opt/emqx/data
+      - emqx-log:/opt/emqx/log
+      - type: bind
+        source: ./emqx.users.csv
+        target: /opt/emqx/etc/auth-built-in-db-bootstrap.csv
+    depends_on:
+      - user-service
 
 volumes:
   mysql-data:
   mongodb-data:
+  emqx-data:
+  emqx-log:
+
+networks:
+  internal_network:
+    driver: bridge

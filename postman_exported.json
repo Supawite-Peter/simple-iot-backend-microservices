@@ -98,6 +98,36 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Update MQTT Password",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\": \"{{mqtt_password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/users/mqtt/password",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"mqtt",
+								"password"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -716,10 +746,6 @@
 	],
 	"variable": [
 		{
-			"key": "JWT token",
-			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoiaGVsbG8iLCJpYXQiOjE3Mjg0ODM5OTksImV4cCI6MTcyODQ4NDU5OX0.FXS3n2qOLPNCaqdT_E7jADeaUebRkaHLIFJtpmpHLDI"
-		},
-		{
 			"key": "date_from",
 			"value": "",
 			"type": "string"
@@ -756,8 +782,13 @@
 		},
 		{
 			"key": "password",
-			"value": "justanormalpassword",
-			"type": "default"
+			"value": "anormalpassword",
+			"type": "string"
+		},
+		{
+			"key": "mqtt_pass",
+			"value": "amqttpassword",
+			"type": "string"
 		}
 	]
 }

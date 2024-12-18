@@ -28,10 +28,10 @@ Furthermore, users can query the latest data or data from a preferred time perio
 - :white_check_mark: Caching
 - :white_check_mark: JWT Refresh/Access Token
 - :white_check_mark: JWT Cookie
+- :white_check_mark: MQTT Support
 - :black_square_button: API Key for Devices Data
 - :black_square_button: Swagger UI Page
 - :black_square_button: e2e Test
-- :black_square_button: MQTT Support
 - :black_square_button: User Role
 - :black_square_button: Aggregate Sensor Data
 - :black_square_button: Simple Web Front-end
@@ -41,11 +41,49 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 1. Create and populate `.env` file. (example on `.env.example`)
 
+3. Open `emqx.users.csv` and edit mqtt username and password as same as config in `.env` file 
+
 2. Run docker compose
 
     ```
     docker-compose up -d
     ```
+
+## MQTT
+
+This application allows sending sensor data to an MQTT broker using the topic format:   `data/{deviceId}/{topic}`  
+
+### Access/Login to MQTT Broker
+To access or log in to the MQTT broker:  
+1. Use the same username and password as registered in the `[POST]/users` endpoint.  
+2. If you want to use a separate MQTT password, send a `PATCH` request to the endpoint `/users/mqtt/password` with the new password in the request body.  
+
+**Note**: Setting a separate MQTT password will disallow logging in to the MQTT broker with your base password.
+
+### Payload Format
+The payload must be a JSON object containing the following:  
+- `username`: Your registered username (string).  
+- `value`: The data value you want to send (number).  
+
+### Example
+To update the `temp` topic for a device with ID `4`, you can send:  
+```json
+{
+  "username": "your_username",
+  "value": 5
+}
+```
+Using the topic: `data/4/temp`  
+This will update the value `5` for the `temp` topic of device ID `4`.
+
+### Important Note
+
+1. You can only update the value of a device ID and topic that you own or have registered.
+2. The `username` in the payload is required to verify ownership of the device and topic.
+
+### Future Update
+The requirement for including username in the payload will be removed in an upcoming update.
+
 
 ## API
 
@@ -136,6 +174,55 @@ Furthermore, users can query the latest data or data from a preferred time perio
 
 </details>
 
+#### Update User MQTT Password
+
+<details>
+ <summary><code>PATCH</code> <code><b>/users/mqtt/password</b></code> <code>(Update user mqtt password)</code></summary>
+
+##### Note
+
+By default if mqtt password is not set, base password will be used for mqtt authentication instead.
+
+##### Authentication
+
+> | cookie key | type | description |      
+> |--------|------|-------------|
+> | `accessToken` | string | a JWT Token Set from `/auth/login` or `/auth/refresh` |
+
+##### Parameters
+
+> None
+
+##### Body
+
+> | name | type | data type | description |
+> |------|------|-----------|-------------|
+> | password | required | string | string of mqtt password  |
+
+
+##### Responses
+
+> | http code | content-type | response |
+> |-----------|--------------|----------|
+> | `201` | `application/json` | `{"id": 1 ,"username": hello}` |
+> | `400` | `application/json` | `{"message": "Validation failed","statusCode": 400}` |
+> | `404` | `application/json` | `{"message": "User is not exist", "statusCode": 404}` |
+
+##### Example cURL
+
+> ```javascript
+> curl --request PATCH
+> --location 'http://localhost:3000/users/mqtt/password' \
+> --header 'Cookie: accessToken={{JWT_TOKEN}}' \
+> --header 'Content-Type: application/json' \
+> --data '{
+>    "password": "world"
+> }'
+> ```
+
+</details>
+
+
 #### Get User Detail
 
 <details>
@@ -171,7 +258,7 @@ Furthermore, users can query the latest data or data from a preferred time perio
 ##### Example cURL
 
 > ```javascript
-> curl --location --request DELETE 'http://localhost:3000/users/1' \
+> curl --location --request GET 'http://localhost:3000/users/1' \
 > --header 'Cookie: accessToken={{JWT_TOKEN}}' \
 > --header 'Content-Type: application/json'
 > ```

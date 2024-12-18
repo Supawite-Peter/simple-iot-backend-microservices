@@ -12,4 +12,4 @@
 	url = https://github.com/Supawite-Peter/simple-iot-sensor-data-service.git
 [submodule "simple-iot-sensor-data-mqtt-adaptor"]
 	path = simple-iot-sensor-data-mqtt-adaptor
-	url = ../simple-iot-sensor-data-mqtt-adaptor
+	url = https://github.com/Supawite-Peter/simple-iot-sensor-data-mqtt-adaptor.git
